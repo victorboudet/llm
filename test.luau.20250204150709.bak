@@ -1,7 +1,0 @@
-a = 0
-
-funtion test()
-    a = 1
-ed
-
-test()  -- Call the function to execute it
