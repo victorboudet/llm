@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+
+using namespace std;
+
+def main():
+    print("Hello, world!")  
+    numbers = [1, 2, 3, 4, 5] 
+    
+    for num in numbers:
+        cout << num << endl  
+
+    my_dict = {"key1": 10, "key2": 20}  
+    
+    cout << my_dict["key1"] << endl  
+
+    def add(a, b):
+        return a + b  
+
+    cout << add(10, 20) << endl  
+
+    for i in range(5):  
+        cout << i << endl
+    
+    square = lambda x: x * x  
+    cout << square(5) << endl  
+
+    return "Finished"  
+
+if __name__ == "__main__":  
+    main()

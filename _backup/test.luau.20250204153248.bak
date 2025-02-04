@@ -1,0 +1,7 @@
+local a = 0
+
+function test()
+    a = 1
+end
+
+call test()

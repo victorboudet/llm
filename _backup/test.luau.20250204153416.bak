@@ -1,0 +1,7 @@
+a = 0
+
+funtion test()
+    a = 1
+ed
+
+test()

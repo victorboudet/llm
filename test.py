@@ -1,5 +1,5 @@
-def lop():
-    for i n range(10):
-        prnt(i)
+def loop():
+    for i in range(10):
+        print(i)
 
 loop()
