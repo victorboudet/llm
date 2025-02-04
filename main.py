@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import time
+import re
 
 # Chargement de la configuration depuis un fichier externe
 from config import BASE_URL, MODEL_NAME, API_TIMEOUT
@@ -36,37 +37,24 @@ def send_request(messages, tools=None):
         print(f"Error: {e}")
         return None
 
+def extract_code(response_text):
+    match = re.search(r'```(?:python|\w*)\n(.*?)```', response_text, re.DOTALL)
+    return match.group(1) if match else response_text.strip()
+
 def analyze_and_fix_code(filename):
     with open(filename, "r", encoding="utf-8") as file:
         code = file.read()
     
     messages = [
         {"role": "system", "content": "You are an expert code debugging assistant. Analyze the provided code, "
-                                          "identify errors, and provide a corrected version with explanations."},
-        {"role": "user", "content": f"Analyze and fix this code:\n```{code}```"}
+                                          "identify errors, and provide a corrected version as a code snippet."},
+        {"role": "user", "content": f"Analyze and fix this code, answer with the raw fixed code:\n```{code}```"}
     ]
     
-    tools = [
-        {
-            "type": "function",
-            "function": {
-                "name": "perform_code_analysis",
-                "description": "Analyzes code for errors and suggests fixes",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "code": {"type": "string", "description": "The code to analyze"},
-                        "language": {"type": "string", "description": "Programming language of the code", "enum": ["go", "python", "javascript", "java", "c++"]}
-                    },
-                    "required": ["code", "language"]
-                }
-            }
-        }
-    ]
-    
-    response = send_request(messages, tools)
+    response = send_request(messages)
     if response:
-        fixed_code = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+        raw_output = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+        fixed_code = extract_code(raw_output)
         return code, fixed_code
     else:
         return code, None
